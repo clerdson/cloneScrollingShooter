@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".GameActivity"
-            android:theme= "@android:style/Theme.NoTitleBar.Fullscreen"
+            android:theme="@style/AppFullScreenTheme"
             android:screenOrientation="landscape"
             >
             <intent-filter>
