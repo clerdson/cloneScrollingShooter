@@ -31,6 +31,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mGameEngine = stopThread();
+        mGameEngine.stopThread();
     }
 }
