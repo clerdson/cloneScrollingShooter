@@ -6,10 +6,14 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
-public class GameEngine extends SurfaceView implements Runnable, GameStarter {
+import java.util.ArrayList;
+
+public class GameEngine extends SurfaceView implements Runnable, GameStarter,GameEngineBroadcaster {
 
     private Thread mThread = null;
     private long mFPS;
+    private ArrayList<InputObserver>inputObservers = new ArrayList();
+    UIController mUIController;
 
     private GameState mGameState;
     private SoundEngine mSoundEngine;
@@ -18,6 +22,7 @@ public class GameEngine extends SurfaceView implements Runnable, GameStarter {
 
     public GameEngine(Context context, Point size) {
         super(context);
+        mUIController  = new UIController(this);
         mGameState = new GameState(this, context);
         mSoundEngine = new SoundEngine(context);
         mHUD  = new HUD(size);
@@ -52,7 +57,10 @@ public class GameEngine extends SurfaceView implements Runnable, GameStarter {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         //Handle the Player 'input here
         // But in a new way
-        mSoundEngine.playShoot();
+
+       for (InputObserver o:inputObservers){
+           o.handleInput(motionEvent,mGameState,mHUD.getControls());
+       }
         return true;
     }
 
@@ -71,6 +79,9 @@ public class GameEngine extends SurfaceView implements Runnable, GameStarter {
         mGameState.startThread();
         mThread = new Thread(this);
         mThread.start();
+    }
+    public void addObserver(InputObserver o){
+        inputObservers.add(o);
     }
 
 }
